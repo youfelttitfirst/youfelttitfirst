@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You Felt It First</title>
+<meta name="description" content="Not therapy. Not generic AI advice. A platform trained on real human experience — that helps you hear what you already know. For anyone. About anything.">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0D0F12; --bg-2: #131619; --bg-3: #1A1E23; --surface: #1F2428;
+    --border: rgba(255,255,255,0.07); --border-hi: rgba(255,255,255,0.14);
+    --text-1: #F0F2F5; --text-2: #A8B0BC; --text-3: #6B7585;
+    --accent: #7EC8B4; --accent-dim: #1E3832; --accent-glow: rgba(126,200,180,0.1);
+    --font-sans: 'DM Sans', system-ui, sans-serif;
+    --font-serif: 'DM Serif Display', Georgia, serif;
+    --radius: 6px; --radius-lg: 10px;
+  }
+  *:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: var(--radius); }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font-sans); background: var(--bg); color: var(--text-1); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+  .skip-link { position: absolute; top: -100px; left: 16px; background: var(--accent); color: var(--bg); padding: 8px 16px; font-size: 14px; font-weight: 500; border-radius: var(--radius); z-index: 200; transition: top 0.2s; }
+  .skip-link:focus { top: 16px; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: 60px; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; background: rgba(13,15,18,0.92); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+  .nav-logo { font-family: var(--font-serif); font-size: 16px; color: var(--text-1); }
+  .nav-right { display: flex; gap: 6px; align-items: center; }
+  .nav-link { font-size: 13px; color: var(--text-3); text-decoration: none; padding: 7px 12px; border-radius: var(--radius); transition: color 0.2s, background 0.2s; }
+  .nav-link:hover { color: var(--text-1); background: var(--surface); }
+  .nav-cta { background: var(--accent-dim); color: var(--accent) !important; border: 1px solid rgba(126,200,180,0.18); font-size: 13px; padding: 7px 14px; border-radius: var(--radius); text-decoration: none; transition: background 0.2s; }
+  .nav-cta:hover { background: rgba(126,200,180,0.18); }
+
+  .hero { min-height: 100vh; display: flex; align-items: center; padding: 80px 40px; position: relative; overflow: hidden; }
+  .grid-bg { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px); background-size: 64px 64px; pointer-events: none; }
+  .glow-1 { position: absolute; top: 15%; right: 30%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(126,200,180,0.05) 0%, transparent 65%); pointer-events: none; }
+  .hero-inner { max-width: 1060px; margin: 0 auto; width: 100%; position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+
+  .badge { display: inline-flex; align-items: center; gap: 7px; padding: 5px 12px; background: var(--accent-dim); border: 1px solid rgba(126,200,180,0.18); border-radius: 20px; font-size: 11px; font-weight: 500; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 24px; opacity: 0; animation: fadeUp 0.6s ease 0.1s forwards; }
+  .badge-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; animation: blink 2s ease infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  h1 { font-family: var(--font-serif); font-size: clamp(46px, 6vw, 76px); line-height: 1.06; color: var(--text-1); margin-bottom: 24px; opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .hero-sub { font-size: 17px; line-height: 1.78; color: var(--text-2); font-weight: 300; max-width: 440px; margin-bottom: 36px; opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards; }
+
+  .form-wrap { display: flex; max-width: 400px; border: 1px solid var(--border-hi); border-radius: var(--radius-lg); overflow: hidden; opacity: 0; animation: fadeUp 0.6s ease 0.4s forwards; transition: border-color 0.3s, box-shadow 0.3s; }
+  .form-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+  .form-input { flex: 1; padding: 13px 16px; font-family: var(--font-sans); font-size: 14px; color: var(--text-1); background: var(--surface); border: none; outline: none; min-width: 0; }
+  .form-input::placeholder { color: var(--text-3); }
+  .form-btn { padding: 13px 20px; font-family: var(--font-sans); font-size: 13px; font-weight: 500; color: var(--bg); background: var(--accent); border: none; cursor: pointer; white-space: nowrap; transition: background 0.2s; }
+  .form-btn:hover { background: #94d4c2; }
+  .form-note { margin-top: 12px; font-size: 12px; color: var(--text-3); opacity: 0; animation: fadeUp 0.6s ease 0.5s forwards; }
+  .success-box { display: none; max-width: 400px; padding: 13px 16px; background: var(--accent-dim); border: 1px solid rgba(126,200,180,0.25); border-radius: var(--radius-lg); font-size: 14px; color: var(--accent); }
+
+  .hero-right { opacity: 0; animation: fadeIn 1s ease 0.5s forwards; }
+  .mirror-card { background: var(--bg-2); border: 1px solid var(--border-hi); border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.5); }
+  .mirror-topbar { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .live-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: blink 2s ease infinite; }
+  .mirror-title-text { font-size: 12px; color: var(--text-3); letter-spacing: 0.06em; }
+  .mirror-msgs { padding: 20px 16px; display: flex; flex-direction: column; gap: 14px; }
+  .m { max-width: 85%; padding: 11px 14px; font-size: 13px; line-height: 1.6; }
+  .m.ai { background: var(--surface); color: var(--text-2); border: 1px solid var(--border); border-radius: 10px 10px 10px 3px; align-self: flex-start; }
+  .m.user { background: var(--accent-dim); color: var(--text-1); border: 1px solid rgba(126,200,180,0.18); border-radius: 10px 10px 3px 10px; align-self: flex-end; }
+  .mirror-foot { padding: 12px 16px; border-top: 1px solid var(--border); text-align: center; font-size: 11px; color: var(--text-3); letter-spacing: 0.06em; }
+
+  .stats { padding: 48px 40px; background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .stats-inner { max-width: 1060px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+  .stat-item { padding: 28px 24px; background: var(--bg-2); }
+  .stat-num { font-family: var(--font-serif); font-size: 36px; color: var(--accent); margin-bottom: 6px; line-height: 1; }
+  .stat-label { font-size: 13px; color: var(--text-3); line-height: 1.5; }
+
+  .who { padding: 100px 40px; }
+  .who-inner { max-width: 1060px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .section-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+  .section-h { font-family: var(--font-serif); font-size: clamp(30px, 4vw, 46px); line-height: 1.15; color: var(--text-1); margin-bottom: 24px; }
+  .section-h em { font-style: italic; color: var(--accent); }
+  .section-p { font-size: 16px; line-height: 1.8; color: var(--text-2); font-weight: 300; margin-bottom: 14px; }
+  .who-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+  .who-item { padding: 24px 20px; background: var(--bg); transition: background 0.2s; }
+  .who-item:hover { background: var(--bg-3); }
+  .who-icon { font-size: 20px; margin-bottom: 10px; }
+  .who-label { font-size: 14px; font-weight: 500; color: var(--text-1); margin-bottom: 6px; }
+  .who-desc { font-size: 13px; color: var(--text-3); line-height: 1.5; }
+
+  .quote { padding: 80px 40px; text-align: center; background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .quote blockquote { font-family: var(--font-serif); font-size: clamp(20px, 3vw, 32px); font-style: italic; line-height: 1.6; color: var(--text-1); max-width: 720px; margin: 0 auto 20px; }
+  .quote cite { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); font-style: normal; }
+
+  .how { padding: 100px 40px; }
+  .how-inner { max-width: 1060px; margin: 0 auto; }
+  .phases { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-top: 48px; }
+  .phase { padding: 36px 28px; background: var(--bg); }
+  .phase-num { font-size: 11px; font-weight: 500; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 16px; }
+  .phase-title { font-family: var(--font-serif); font-size: 22px; color: var(--text-1); margin-bottom: 12px; }
+  .phase-desc { font-size: 14px; color: var(--text-3); line-height: 1.65; margin-bottom: 16px; }
+  .phase-tag { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 20px; background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(126,200,180,0.15); letter-spacing: 0.06em; }
+  .phase-tag.soon { background: var(--surface); color: var(--text-3); border-color: var(--border); }
+
+  .cta { padding: 120px 40px; text-align: center; position: relative; overflow: hidden; }
+  .cta::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 800px; height: 500px; background: radial-gradient(ellipse, rgba(126,200,180,0.06) 0%, transparent 65%); pointer-events: none; }
+  .cta-inner { position: relative; z-index: 1; }
+  .cta h2 { font-family: var(--font-serif); font-size: clamp(38px, 5.5vw, 64px); line-height: 1.15; color: var(--text-1); margin-bottom: 16px; }
+  .cta h2 em { font-style: italic; color: var(--accent); }
+  .cta-sub { font-size: 16px; color: var(--text-3); margin-bottom: 40px; }
+  .cta-form { display: flex; max-width: 380px; margin: 0 auto 14px; border: 1px solid var(--border-hi); border-radius: var(--radius-lg); overflow: hidden; transition: border-color 0.3s, box-shadow 0.3s; }
+  .cta-form:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+  .cta-input { flex: 1; padding: 14px 16px; font-family: var(--font-sans); font-size: 14px; color: var(--text-1); background: var(--surface); border: none; outline: none; min-width: 0; }
+  .cta-input::placeholder { color: var(--text-3); }
+  .cta-btn { padding: 14px 20px; font-family: var(--font-sans); font-size: 13px; font-weight: 500; color: var(--bg); background: var(--accent); border: none; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
+  .cta-btn:hover { background: #94d4c2; }
+  .cta-note { font-size: 12px; color: var(--text-3); }
+  .cta-success { display: none; max-width: 380px; margin: 0 auto 14px; padding: 14px 16px; background: var(--accent-dim); border: 1px solid rgba(126,200,180,0.25); border-radius: var(--radius-lg); font-size: 14px; color: var(--accent); }
+
+  footer { padding: 28px 40px; background: var(--bg-2); border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .footer-logo { font-family: var(--font-serif); font-size: 14px; color: var(--text-3); }
+  .footer-note { font-size: 12px; color: var(--text-3); letter-spacing: 0.04em; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+  @media (max-width: 768px) {
+    nav { padding: 0 16px; } .hero { padding: 80px 16px 60px; } .hero-inner { grid-template-columns: 1fr; } .hero-right { display: none; }
+    .stats-inner { grid-template-columns: 1fr 1fr; } .who { padding: 60px 16px; } .who-inner { grid-template-columns: 1fr; gap: 40px; }
+    .phases { grid-template-columns: 1fr; } .cta { padding: 80px 16px; } footer { padding: 20px 16px; } .quote { padding: 60px 16px; } .how { padding: 60px 16px; }
+  }
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a>
+<nav role="navigation" aria-label="Main navigation">
+  <div class="nav-logo">You Felt It First</div>
+  <div class="nav-right">
+    <a href="#who" class="nav-link">Who it's for</a>
+    <a href="#how" class="nav-link">How it works</a>
+    <a href="#waitlist" class="nav-cta">Get early access</a>
+  </div>
+</nav>
+<main id="main">
+<section class="hero" aria-label="Hero">
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="glow-1" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="badge"><span class="badge-dot"></span>Now building · Join the waitlist</div>
+      <h1>The mirror<br>you've been<br><em>missing.</em></h1>
+      <p class="hero-sub">Not therapy. Not generic AI advice. A platform trained on real human experience — that helps you hear what you already know. For anyone. About anything.</p>
+      <div class="form-wrap" id="hero-form">
+        <label for="hero-email" style="position:absolute;left:-9999px">Email address</label>
+        <input type="email" id="hero-email" class="form-input" placeholder="your@email.com" autocomplete="email">
+        <button class="form-btn" onclick="join('hero')">Get early access</button>
+      </div>
+      <div class="success-box" id="hero-success" role="status" aria-live="polite">✦ You're on the list. First access to everything.</div>
+      <p class="form-note">No spam. No noise. Just early access when we're ready.</p>
+    </div>
+    <div class="hero-right" aria-label="Sample conversation">
+      <div class="mirror-card">
+        <div class="mirror-topbar">
+          <span class="live-dot" aria-hidden="true"></span>
+          <span class="mirror-title-text">The Mirror · Anonymous · Private</span>
+        </div>
+        <div class="mirror-msgs" role="log">
+          <div class="m ai">What's on your mind? You don't have to have it figured out.</div>
+          <div class="m user">Something feels off but I can't explain it.</div>
+          <div class="m ai">What did you feel before you started trying to explain it? Before the reasoning — what was the very first thing?</div>
+          <div class="m user">That it wasn't right. I felt it straight away.</div>
+          <div class="m ai">You felt it first. That's not nothing. That's the whole thing.</div>
+        </div>
+        <div class="mirror-foot">Not therapy · Not advice · Just you, hearing yourself</div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="stats" aria-label="Why this matters">
+  <div class="stats-inner">
+    <div class="stat-item"><div class="stat-num">1B+</div><div class="stat-label">People globally with no access to mental health support</div></div>
+    <div class="stat-item"><div class="stat-num">91%</div><div class="stat-label">Of therapy seekers cite cost as the primary barrier</div></div>
+    <div class="stat-item"><div class="stat-num">#1</div><div class="stat-label">Fastest growing app category globally: mental wellness</div></div>
+    <div class="stat-item"><div class="stat-num">0</div><div class="stat-label">Platforms trained on anonymised real human experience</div></div>
+  </div>
+</section>
+<section class="who" id="who" aria-label="Who this is for">
+  <div class="who-inner">
+    <div>
+      <div class="section-tag">Who it's for</div>
+      <h2 class="section-h">Anyone sitting<br>alone with<br>something they<br>can't <em>name.</em></h2>
+      <p class="section-p">This is not a women's platform. Not a relationship platform. It started there — because that's where the founder's experience began.</p>
+      <p class="section-p">But the mirror works for any human problem. Any age. Any background. Any experience.</p>
+    </div>
+    <div class="who-grid">
+      <div class="who-item"><div class="who-icon" aria-hidden="true">🧠</div><div class="who-label">Mental health</div><div class="who-desc">Depression, burnout, anxiety, not recognising yourself anymore</div></div>
+      <div class="who-item"><div class="who-icon" aria-hidden="true">💔</div><div class="who-label">Relationships</div><div class="who-desc">Confusion, inconsistency, not being fully chosen</div></div>
+      <div class="who-item"><div class="who-icon" aria-hidden="true">👨‍👩‍👧</div><div class="who-label">Family</div><div class="who-desc">Control, guilt, outgrowing the people who raised you</div></div>
+      <div class="who-item"><div class="who-icon" aria-hidden="true">💼</div><div class="who-label">Career</div><div class="who-desc">Invisible, undervalued, performing without being seen</div></div>
+      <div class="who-item"><div class="who-icon" aria-hidden="true">🌊</div><div class="who-label">Crisis</div><div class="who-desc">When you need to feel understood before you can do anything else</div></div>
+      <div class="who-item"><div class="who-icon" aria-hidden="true">🔄</div><div class="who-label">Life transitions</div><div class="who-desc">Menopause, grief, divorce, loss, starting over</div></div>
+    </div>
+  </div>
+</section>
+<section class="quote" aria-label="Book excerpt">
+  <blockquote>"The confusion you felt wasn't complexity. It was inconsistency. The instinct you kept talking yourself out of wasn't paranoia. It was clarity — arriving early, waiting patiently for you to catch up."</blockquote>
+  <cite>You Felt It First · The Book</cite>
+</section>
+<section class="how" id="how" aria-label="How it works">
+  <div class="how-inner">
+    <div class="section-tag">How it works</div>
+    <h2 class="section-h">Simple. Private.<br><em>Built to grow with you.</em></h2>
+    <div class="phases">
+      <div class="phase"><div class="phase-num">Now</div><div class="phase-title">The Mirror</div><div class="phase-desc">Talk to a mirror trained on real human experience. Anonymous. Private. Available whenever you need it. No judgment. No advice. Just the right question.</div><span class="phase-tag">Launching soon</span></div>
+      <div class="phase"><div class="phase-num">Next</div><div class="phase-title">The Book</div><div class="phase-desc">Read lived experience structured into lessons — not by a researcher, but by someone who felt it first. The first volume covers self-trust. More to follow.</div><span class="phase-tag soon">Coming soon</span></div>
+      <div class="phase"><div class="phase-num">Future</div><div class="phase-title">The Community</div><div class="phase-desc">Share your experience anonymously. Help others feel less alone. Contributors earn from the value their experience creates for others.</div><span class="phase-tag soon">In development</span></div>
+    </div>
+  </div>
+</section>
+<section class="cta" id="waitlist" aria-label="Join waitlist">
+  <div class="cta-inner">
+    <h2>You already know.<br><em>Trust it.</em></h2>
+    <p class="cta-sub">Join the waitlist. First access to the mirror, the book, and everything we build next.</p>
+    <div class="cta-form" id="cta-form">
+      <label for="cta-email" style="position:absolute;left:-9999px">Email address</label>
+      <input type="email" id="cta-email" class="cta-input" placeholder="your@email.com" autocomplete="email">
+      <button class="cta-btn" onclick="join('cta')">Join waitlist</button>
+    </div>
+    <div class="cta-success" id="cta-success" role="status" aria-live="polite">✦ You're on the list. We'll be in touch.</div>
+    <p class="cta-note">No spam. Ever.</p>
+  </div>
+</section>
+</main>
+<footer role="contentinfo">
+  <div class="footer-logo">You Felt It First</div>
+  <div class="footer-note">youfelttitfirst.com · Not therapy. Not advice. Just you, hearing yourself.</div>
+</footer>
+<script>
+  function join(src) {
+    const id = src === 'hero' ? 'hero-email' : 'cta-email';
+    const val = document.getElementById(id).value.trim();
+    if (!val || !val.includes('@') || !val.includes('.')) {
+      const el = document.getElementById(id);
+      el.style.outline = '2px solid #ef4444';
+      el.setAttribute('aria-invalid', 'true');
+      el.focus();
+      setTimeout(() => { el.style.outline = ''; el.removeAttribute('aria-invalid'); }, 2500);
+      return;
+    }
+    if (src === 'hero') {
+      document.getElementById('hero-form').style.display = 'none';
+      document.getElementById('hero-success').style.display = 'block';
+    } else {
+      document.getElementById('cta-form').style.display = 'none';
+      document.getElementById('cta-success').style.display = 'block';
+    }
+  }
+  ['hero-email','cta-email'].forEach(id => {
+    document.getElementById(id)?.addEventListener('keydown', e => { if (e.key === 'Enter') join(id.split('-')[0]); });
+  });
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; obs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.who-item, .phase, .stat-item').forEach((el, i) => {
+    el.style.cssText += `opacity:0;transform:translateY(10px);transition:opacity 0.5s ease ${i*0.04}s,transform 0.5s ease ${i*0.04}s,background 0.2s`;
+    obs.observe(el);
+  });
+</script>
+</body>
+</html>
